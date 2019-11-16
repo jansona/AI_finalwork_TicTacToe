@@ -1,5 +1,6 @@
 import sys
 import pygame
+from MinMaxAlgorithm import MinMaxAlgorithm, get_result
 
 
 pygame.init()
@@ -14,7 +15,7 @@ screen = pygame.display.set_mode(size)
 
 GRID_WIDTH = int(BOARD_SIZE / 3)
 
-borad_condition = [
+board_condition = [
     [0, 0, 0],
     [0, 0, 0],
     [0, 0, 0]
@@ -30,7 +31,7 @@ def draw_piece():
 
     for y in range(3):
         for x in range(3):
-            piece_con = borad_condition[y][x]
+            piece_con = board_condition[y][x]
             if piece_con != 0 :
                 if piece_con == 1:
                     piece_color = WHITE
@@ -41,6 +42,18 @@ def draw_piece():
 
 
 is_white = True
+difficult = 7
+
+if is_white:
+    mma = MinMaxAlgorithm(-1, difficult)
+else:
+    mma = MinMaxAlgorithm(1, difficult)
+
+if not is_white:
+    # val, action = mma(board_condition)
+    # board_condition[action[0]][action[1]] = 1
+    board_condition[1][1] = 1
+    draw_piece()
 
 while True:
     for event in pygame.event.get():
@@ -54,14 +67,31 @@ while True:
             y, x = grid
             i, j = x, y
 
-            if borad_condition[i][j] == 0:
+            if board_condition[i][j] == 0:
                 if is_white:
-                    borad_condition[i][j] = 1
+                    board_condition[i][j] = 1
+                    val, action = mma(board_condition)
+                    if action:
+                        mi, mj = action
+                        board_condition[mi][mj] = -1
                 else:
-                    borad_condition[i][j] = -1
-                is_white = not is_white
+                    board_condition[i][j] = -1
+                    val, action = mma(board_condition)
+                    if action:
+                        mi, mj = action
+                        board_condition[mi][mj] = 1
+                # is_white = not is_white
 
             draw_piece()
+
+            result = get_result(board_condition)
+
+            if result == 1:
+                pass
+            elif result == -1:
+                pass
+            elif result == 0:
+                pass
 
         pygame.display.flip()
 
