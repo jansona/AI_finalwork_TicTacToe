@@ -1,7 +1,45 @@
 import sys
 import pygame
 from MinMaxAlgorithm import MinMaxAlgorithm, get_result
+from ABPAlgorithm import ABPAlgorithm
 
+
+options = ["人机对弈：y/n\n", "是否先手：y/n\n", "1.极小极大算法；2.alpha-beta剪枝算法：\n"]
+
+with_ai = True
+is_white = False
+algorithm = 1
+
+i = 0
+while i < len(options):
+    choice = input(options[i])
+
+    if i == 0:
+        if choice == 'y':
+            with_ai = True
+        elif choice == 'n':
+            with_ai = False
+            break
+        else:
+            print("无效选项: {}".format(choice))
+            continue
+    elif i == 1:
+        if choice == 'y':
+            is_white = True
+        elif choice == 'n':
+            is_white = False
+        else:
+            print("无效选项: {}".format(choice))
+            continue
+    elif i == 2:
+        if choice == '1':
+            algorithm = 1
+        elif choice == '2':
+            algorithm = 2
+        else:
+            print("无效选项: {}".format(choice))
+            continue
+    i += 1
 
 pygame.init()
 
@@ -40,18 +78,15 @@ def draw_piece():
                 pygame.draw.circle(screen, piece_color,
                     (int((x + 0.5) * GRID_WIDTH), int((y + 0.5) * GRID_WIDTH)), int(GRID_WIDTH / 2) - 10)
 
-
-is_white = True
-difficult = 7
+difficult = 10
 
 if is_white:
-    mma = MinMaxAlgorithm(-1, difficult)
+    mma = ABPAlgorithm(-1, difficult)
 else:
-    mma = MinMaxAlgorithm(1, difficult)
+    mma = ABPAlgorithm(1, difficult)
 
 if not is_white:
-    # val, action = mma(board_condition)
-    # board_condition[action[0]][action[1]] = 1
+
     board_condition[1][1] = 1
     draw_piece()
 
@@ -62,7 +97,7 @@ while True:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             grid = (int(event.pos[0] / (GRID_WIDTH + .0)),
                 int(event.pos[1] / (GRID_WIDTH + .0)))
-            print(grid)
+            # print(grid)
             
             y, x = grid
             i, j = x, y

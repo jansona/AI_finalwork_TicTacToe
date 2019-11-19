@@ -30,7 +30,7 @@ def get_result(board_con) :
     return 0
 
 
-class MinMaxAlgorithm(object):
+class ABPAlgorithm(object):
 
     def __init__(self, my_piece=-1, difficult=7) :
         self.my_piece = my_piece
@@ -86,7 +86,7 @@ class MinMaxAlgorithm(object):
             return -1
         return 1
 
-    def minimax(self, piece, depth=0):
+    def minimax_pruning(self, piece, alpha, beta, depth=0):
 
         if depth > self.max_depth:
             return 10 - depth, None
@@ -106,24 +106,35 @@ class MinMaxAlgorithm(object):
 
         for action in self.find_avail_action() :
             self.find_actions(action, piece)
-            val, _ = self.minimax(self.exchange(piece), depth+1)
+            val, _ = self.minimax_pruning(self.exchange(piece), alpha, beta, depth+1)
             self.find_actions(action, 0)
             if piece == self.my_piece:
                 if val > value:
                     value, suitable_action = val, action
+
+                if val >= beta:
+                    return val, suitable_action
+                elif val > alpha:
+                    alpha = val
+
             else :
                 if val < value:
                     value, suitable_action = val, action
+
+                if val <= alpha:
+                    return val, suitable_action
+                elif val < beta:
+                    beta = val
                     
         return value, suitable_action
 
     def __call__(self, board_con):
         self.board_con = board_con
-        return self.minimax(self.my_piece)
+        return self.minimax_pruning(self.my_piece, -10, 10)
 
 
 if __name__ == "__main__":
     board = [[1,0,-1],[0,1,-1],[0,0,0]]
 
-    mma = MinMaxAlgorithm(1)
+    mma = ABPAlgorithm(1)
     print(mma(board))
