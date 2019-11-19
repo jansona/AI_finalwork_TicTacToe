@@ -136,11 +136,32 @@ while True:
             result = get_result(board_condition)
 
             if result == 1:
-                pass
+                if with_ai:
+                    if is_white:
+                        win_str = "You're winner!"
+                    else:
+                        win_str = "AI's winner!"
+                else:
+                    win_str = "The first player's winner!"
+                font = pygame.font.SysFont("Arial", 70)
+                win_surf = font.render(win_str, 1, (242, 3, 36))
+                screen.blit(win_surf, [screen.get_width() / 2 - win_surf.get_width() / 2, 100])
             elif result == -1:
-                pass
+                if with_ai:
+                    if is_white:
+                        win_str = "AI's winner!"
+                    else:
+                        win_str = "You're winner!"
+                else:
+                    win_str = "The second player's winner!"
+                font = pygame.font.SysFont("Arial", 70)
+                win_surf = font.render(win_str, 1, (242, 3, 36))
+                screen.blit(win_surf, [screen.get_width() / 2 - win_surf.get_width() / 2, 100])
             elif result == 0:
-                pass
+                stalemate_str = "Stalemate!"
+                font = pygame.font.SysFont("Arial", 70)
+                stalemate_surf = font.render(stalemate_str, 1, (242, 3, 36))
+                screen.blit(stalemate_surf, [screen.get_width() / 2 - stalemate_surf.get_width() / 2, 100])
 
         pygame.display.flip()
 

@@ -3,7 +3,7 @@
 def get_result(board_con) :
     all_line_sums = []
     
-    for line in all_line_sums:
+    for line in board_con:
         all_line_sums.append(sum(line))
     for j in range(3):
         col_sum = 0
