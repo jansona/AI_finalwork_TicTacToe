@@ -80,12 +80,20 @@ def draw_piece():
 
 difficult = 10
 
-if is_white:
-    mma = ABPAlgorithm(-1, difficult)
-else:
-    mma = ABPAlgorithm(1, difficult)
+ai_algorithm = None
+if with_ai:
+    ai_piece = None
+    if is_white:
+        ai_piece = -1
+    else:
+        ai_piece = 1
 
-if not is_white:
+    if algorithm == 1:
+        ai_algorithm = MinMaxAlgorithm(ai_piece, difficult)
+    elif algorithm == 2:
+        ai_algorithm = ABPAlgorithm(ai_piece, difficult)
+
+if not is_white and with_ai:
 
     board_condition[1][1] = 1
     draw_piece()
@@ -103,19 +111,25 @@ while True:
             i, j = x, y
 
             if board_condition[i][j] == 0:
-                if is_white:
-                    board_condition[i][j] = 1
-                    val, action = mma(board_condition)
-                    if action:
-                        mi, mj = action
-                        board_condition[mi][mj] = -1
+                if with_ai:
+                    if is_white:
+                        board_condition[i][j] = 1
+                        val, action = ai_algorithm(board_condition)
+                        if action:
+                            mi, mj = action
+                            board_condition[mi][mj] = -1
+                    else:
+                        board_condition[i][j] = -1
+                        val, action = ai_algorithm(board_condition)
+                        if action:
+                            mi, mj = action
+                            board_condition[mi][mj] = 1
                 else:
-                    board_condition[i][j] = -1
-                    val, action = mma(board_condition)
-                    if action:
-                        mi, mj = action
-                        board_condition[mi][mj] = 1
-                # is_white = not is_white
+                    if is_white:
+                        board_condition[i][j] = 1
+                    else:
+                        board_condition[i][j] = -1
+                    is_white = not is_white
 
             draw_piece()
 
