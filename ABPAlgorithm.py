@@ -108,19 +108,24 @@ class ABPAlgorithm(object):
             self.find_actions(action, piece)
             val, _ = self.minimax_pruning(self.exchange(piece), alpha, beta, depth+1)
             self.find_actions(action, 0)
+
+            # max
             if piece == self.my_piece:
                 if val > value:
                     value, suitable_action = val, action
 
+                # beta 剪枝
                 if val >= beta:
                     return val, suitable_action
                 elif val > alpha:
                     alpha = val
 
+            # min
             else :
                 if val < value:
                     value, suitable_action = val, action
 
+                # alpha 剪枝
                 if val <= alpha:
                     return val, suitable_action
                 elif val < beta:

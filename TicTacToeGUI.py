@@ -1,3 +1,6 @@
+print("Please keep waiting, it may take some time...")  # 迫不得已写这里
+
+
 import sys
 import pygame
 from MinMaxAlgorithm import MinMaxAlgorithm, get_result

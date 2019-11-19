@@ -108,9 +108,12 @@ class MinMaxAlgorithm(object):
             self.find_actions(action, piece)
             val, _ = self.minimax(self.exchange(piece), depth+1)
             self.find_actions(action, 0)
+
+            # max
             if piece == self.my_piece:
                 if val > value:
                     value, suitable_action = val, action
+            # min
             else :
                 if val < value:
                     value, suitable_action = val, action
