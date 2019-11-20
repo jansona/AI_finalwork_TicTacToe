@@ -2,6 +2,7 @@ print("Please keep waiting, it may take some time...")  # 迫不得已写这里
 
 
 import sys
+# import time
 import pygame
 from MinMaxAlgorithm import MinMaxAlgorithm, get_result
 from ABPAlgorithm import ABPAlgorithm
@@ -117,7 +118,12 @@ while True:
                 if with_ai:
                     if is_white:
                         board_condition[i][j] = 1
+
+                        # start = time.time()
                         val, action = ai_algorithm(board_condition)
+                        # end = time.time()
+                        # print("algorithm {} takes {} s".format(algorithm, end - start))
+
                         if action:
                             mi, mj = action
                             board_condition[mi][mj] = -1
