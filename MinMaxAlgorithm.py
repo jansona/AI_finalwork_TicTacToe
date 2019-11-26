@@ -48,7 +48,7 @@ class MinMaxAlgorithm(object):
         
         return available_action
 
-    def find_actions(self, pos, piece):
+    def take_action(self, pos, piece):
         i, j = pos
         self.board_con[i][j] = piece
 
@@ -88,12 +88,13 @@ class MinMaxAlgorithm(object):
 
     def minimax(self, piece, depth=0):
 
-        if depth > self.max_depth:
-            return 10 - depth, None
         if piece == self.my_piece: 
             value = -10
         else:
             value = 10
+
+        if depth > self.max_depth:
+            return -value, None
         
         result = get_result(self.board_con)
 
@@ -105,9 +106,9 @@ class MinMaxAlgorithm(object):
             return 10 - depth, None
 
         for action in self.find_avail_action() :
-            self.find_actions(action, piece)
+            self.take_action(action, piece)
             val, _ = self.minimax(self.exchange(piece), depth+1)
-            self.find_actions(action, 0)
+            self.take_action(action, 0)
 
             # max
             if piece == self.my_piece:

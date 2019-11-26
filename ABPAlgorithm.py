@@ -48,7 +48,7 @@ class ABPAlgorithm(object):
         
         return available_action
 
-    def find_actions(self, pos, piece):
+    def take_action(self, pos, piece):
         i, j = pos
         self.board_con[i][j] = piece
 
@@ -88,12 +88,13 @@ class ABPAlgorithm(object):
 
     def minimax_pruning(self, piece, alpha, beta, depth=0):
 
-        if depth > self.max_depth:
-            return 10 - depth, None
         if piece == self.my_piece: 
             value = -10
         else:
             value = 10
+
+        if depth > self.max_depth:
+            return value, None
         
         result = get_result(self.board_con)
 
@@ -105,9 +106,9 @@ class ABPAlgorithm(object):
             return 10 - depth, None
 
         for action in self.find_avail_action() :
-            self.find_actions(action, piece)
+            self.take_action(action, piece)
             val, _ = self.minimax_pruning(self.exchange(piece), alpha, beta, depth+1)
-            self.find_actions(action, 0)
+            self.take_action(action, 0)
 
             # max
             if piece == self.my_piece:
@@ -116,7 +117,7 @@ class ABPAlgorithm(object):
 
                 # beta 剪枝
                 if val >= beta:
-                    return val, suitable_action
+                    break
                 elif val > alpha:
                     alpha = val
 
@@ -127,7 +128,7 @@ class ABPAlgorithm(object):
 
                 # alpha 剪枝
                 if val <= alpha:
-                    return val, suitable_action
+                    break
                 elif val < beta:
                     beta = val
                     
